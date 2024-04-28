@@ -1,5 +1,3 @@
-// index.js
-
 const express = require('express');
 const app = express();
 const tasksRouter = require('./routes/tasks');
@@ -9,8 +7,8 @@ let tasks = [];
 
 app.use(express.json());
 
-// Mount the tasks router
-app.use('/tasks', tasksRouter);
+// // Mount the tasks router
+// app.use('./tasks', tasksRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
