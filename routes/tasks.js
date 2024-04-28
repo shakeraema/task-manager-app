@@ -78,21 +78,67 @@ router.put('/:id', (req, res,next) => {
 router.delete('/:id', (req, res,next) => {
   try{
     const taskId = parseInt(req.params.id);
-  
+    const { title, description, status } = req.body;
+
+    // Find the task by ID
+    const taskToUpdate = tasks.find(task => task.id === taskId);
+
+    // If task not found, return 404
+    if (!taskToUpdate) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Update task with new data
+    taskToUpdate.title = title || taskToUpdate.title;
+    taskToUpdate.description = description || taskToUpdate.description;
+    taskToUpdate.status = status || taskToUpdate.status;
+
+    // Return the updated task
+    res.json(taskToUpdate);
+  } catch (error) {
+    // If an error occurs, return a 500 Internal Server Error
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Function to handle DELETE request to delete a task
+router.delete('/:id', (req, res,next) => {
+  try {
+    const taskId = parseInt(req.params.id);
+
     // Find the index of the task to delete
     const taskIndex = tasks.findIndex(task => task.id === taskId);
-  
+
     // If task not found, return 404
     if (taskIndex === -1) {
       return res.status(404).json({ message: 'Task not found' });
     }
-  
+
     // Remove the task from the array
     tasks.splice(taskIndex, 1);
-  
+
     // Return success message
     res.json({ message: 'Task deleted successfully' });
-  });
+  } catch (error) {
+    // If an error occurs, return a 500 Internal Server Error
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+  
+  //   // Find the index of the task to delete
+  //   const taskIndex = tasks.findIndex(task => task.id === taskId);
+  
+  //   // If task not found, return 404
+  //   if (taskIndex === -1) {
+  //     return res.status(404).json({ message: 'Task not found' });
+  //   }
+  
+  //   // Remove the task from the array
+  //   tasks.splice(taskIndex, 1);
+  
+  //   // Return success message
+  //   res.json({ message: 'Task deleted successfully' });
+  // });
 
   module.exports = router;
 
